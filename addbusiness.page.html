@@ -1,0 +1,378 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button (click)="goback()"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Add Business</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content padding class="my-page">
+    <form [formGroup]="businessForm" (submit)="addbusiness()" class="addbusinessForm">
+        <ion-item>
+            <ion-input type="text" formControlName="name" placeholder="Business Name"></ion-input>
+        </ion-item>
+
+        <div *ngIf="!businessForm.controls['name'].valid && businessForm.controls['name'].touched" class="text-danger">
+            <p>Enter Name</p>
+
+        </div>
+        <ion-item>
+            <ion-textarea rows="10" type="text" formControlName="description" placeholder="Description"> </ion-textarea>
+        </ion-item>
+
+        <div *ngIf="!businessForm.controls['description'].valid && businessForm.controls['description'].touched" class="text-danger">
+            <p>Enter Description</p>
+
+        </div>
+        <ion-item>
+            <ion-input type="text" formControlName="website" placeholder="www.website.com"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label style="color:rgb(163, 31, 35);">Category</ion-label>
+            <!-- <ion-select interface="popover" formControlName="category">
+
+                <ng-container *ngFor="let category of categories">
+                    <ion-select-option value="{{category.name}}">{{category.name}}</ion-select-option>
+                </ng-container>
+            </ion-select> -->
+            <ionic-selectable formControlName="category" [items]="categorys" itemValueField="name" itemTextField="name" [canSearch]="true" [hasInfiniteScroll]="true" (onSearch)="searchCategory($event)" (onInfiniteScroll)="getMoreCategorys($event)"></ionic-selectable>
+        </ion-item>
+        <ion-item *ngIf="validateField=='true'">
+            <div *ngIf="!businessForm.controls['category'].valid && businessForm.controls['category'].touched" class="text-danger">
+                <p>Please select category</p>
+
+            </div>
+        </ion-item>
+        <ion-item>
+            <ion-label style="color:rgb(163, 31, 35)">District</ion-label>
+            <ionic-selectable item-content itemValueField="name" itemTextField="name" [items]="ports" [canSearch]="true" [hasInfiniteScroll]="true"
+              formControlName="city" (onSearch)="searchPorts($event)" (onInfiniteScroll)="getMorePorts($event)" (onChange)="getplace($event)">
+            </ionic-selectable>
+            <!-- <ion-select interface="popover" placeholder="Select District" formControlName="city" #C (ionChange)="getplace(C.value)">
+              <ng-container *ngFor="let name of cities">
+                <ion-select-option value="{{name.city}}">{{name.city}}</ion-select-option>
+              </ng-container>
+            </ion-select> -->
+      
+          </ion-item>
+      
+          <div *ngIf="validateField=='true'">
+            <div *ngIf="!businessForm.controls['city'].valid && businessForm.controls['city'].touched" class="text-danger">
+              <p>Please Select District </p>
+            </div>
+          </div>
+      
+          <!-- <ion-item>
+            <ion-label>Port</ion-label>
+            <ionic-selectable item-content itemValueField="name" itemTextField="name" [items]="ports" [canSearch]="true" [hasInfiniteScroll]="true"
+              (onSearch)="searchPorts($event)" (onInfiniteScroll)="getMorePorts($event)">
+            </ionic-selectable>
+          </ion-item> -->
+      
+          <ion-item>
+            <ion-input type="text" maxlength="30" formControlName="startaddress" placeholder="Door No,Street Name"></ion-input>
+          </ion-item>
+          <div *ngIf="!businessForm.controls['startaddress'].valid && businessForm.controls['startaddress'].touched" class="text-danger">
+            <p>Please Enter Address1 </p>
+          </div>
+      
+          <ion-item>
+            <ion-label style="color:rgb(163, 31, 35);">Area</ion-label>
+            <!-- <ion-select  interface="popover" formControlName="endaddress" #D (ionChange)="getpincode(D.value)">
+      
+              <ng-container *ngFor="let name of places">
+                <ion-select-option value="{{name.place}}">{{name.place}}</ion-select-option>
+              </ng-container>
+            </ion-select> -->
+      
+            <ionic-selectable formControlName="endaddress" [items]="places" itemValueField="place" itemTextField="place" [canSearch]="true"
+              (onChange)="getpincode($event)">
+            </ionic-selectable>
+      
+          </ion-item>
+          <div *ngIf="validateField=='true'">
+            <div *ngIf="!businessForm.controls['endaddress'].valid && businessForm.controls['endaddress'].touched" class="text-danger">
+              <p>Please Select Address2</p>
+            </div>
+          </div>
+      
+          <ion-item>
+            <ion-label style="color:rgb(163, 31, 35);">Pincode</ion-label>
+            <ion-select interface="popover" formControlName="pincode" #S (ionChange)="getstateList(S.value)">
+      
+              <ng-container *ngFor="let name of pincodes">
+                <ion-select-option value="{{name.pincode}}">{{name.pincode}}</ion-select-option>
+              </ng-container>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="validateField=='true'">
+            <div *ngIf="!businessForm.controls['pincode'].valid && businessForm.controls['pincode'].touched" class="text-danger">
+              <p>Please select Pincode</p>
+            </div>
+          </div>
+          <ion-item>
+            <ion-label style="color:rgb(163, 31, 35);">State</ion-label>
+            <ion-select interface="popover" formControlName="state">
+              <!-- <ion-select-option value="TamilNadu">TamilNadu</ion-select-option> -->
+              <ng-container *ngFor="let name of states">
+                <ion-select-option value="{{name.state}}">{{name.state}}</ion-select-option>
+              </ng-container>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="validateField=='true'">
+            <div *ngIf="!businessForm.controls['state'].valid && businessForm.controls['state'].touched" class="text-danger">
+              <p>Please Select State</p>
+            </div>
+          </div>
+        <ion-item>
+            <input type="file" accept="image/*" id="upload" (change)="changeListener($event)">
+        </ion-item>
+        <ion-item>
+            <ion-label fixed>Business logo</ion-label>
+            <ion-avatar item-end>
+                <img *ngIf="img1" [src]="img1" />
+                <img *ngIf="!img1" src="{{imgPreview}}">
+            </ion-avatar>
+        </ion-item>
+        <!--  -->
+
+        <ion-item no-lines>
+                <ion-label fixed>Custom Template</ion-label>
+        </ion-item>
+        <ion-list>
+            <ion-radio-group formControlName="template">
+                <ion-row>
+                    <ion-item no-lines>
+                        <!-- <ion-avatar slot="start"> -->
+                            <img src="assets/images/temp1.jpg" class="tempdesign">
+                        <!-- </ion-avatar> -->
+                        <ion-radio slot="end" value="1" checked></ion-radio>
+                    </ion-item>
+                </ion-row>
+                <ion-row>
+                    <ion-item no-lines>
+                        <!-- <ion-avatar slot="start"> -->
+                            <img src="assets/images/temp2.jpg" class="tempdesign">
+                        <!-- </ion-avatar> -->
+                        <ion-radio slot="end" value="2"></ion-radio>
+                    </ion-item>
+                </ion-row>
+                <ion-row>
+                    <ion-item no-lines>
+                        <!-- <ion-avatar slot="start"> -->
+                            <img src="assets/images/temp3.jpg" class="tempdesign">
+                        <!-- </ion-avatar> -->
+                        <ion-radio slot="end" value="3"></ion-radio>
+                    </ion-item>
+                </ion-row>
+                <ion-row>
+                    <ion-item no-lines>
+                        <!-- <ion-avatar slot="start"> -->
+                            <img src="assets/images/temp4.jpg"  class="tempdesign">
+                        <!-- </ion-avatar> -->
+                        <ion-radio slot="end" value="4"></ion-radio>
+                    </ion-item>
+                </ion-row>
+                <ion-row>
+                    <ion-item no-lines>
+                        <!-- <ion-avatar slot="start"> -->
+                            <img src="assets/images/temp5.jpg"  class="tempdesign">
+                        <!-- </ion-avatar> -->
+                        <ion-radio slot="end" value="5"></ion-radio>
+                    </ion-item>
+                </ion-row>
+                <ion-row>
+                    <ion-item no-lines>
+                        <!-- <ion-avatar slot="start"> -->
+                            <img src="assets/images/temp6.jpg" class="tempdesign">
+                        <!-- </ion-avatar> -->
+                        <ion-radio slot="end" value="6"></ion-radio>
+                    </ion-item>
+                </ion-row>
+                <ion-row>
+                    <ion-item no-lines>
+                        <!-- <ion-avatar slot="start"> -->
+                            <img src="assets/images/temp7.jpg"  class="tempdesign">
+                        <!-- </ion-avatar> -->
+                        <ion-radio slot="end" value="7"></ion-radio>
+                    </ion-item>
+                </ion-row>
+                <ion-row>
+                    <ion-item no-lines>
+                        <!-- <ion-avatar slot="start"> -->
+                            <img src="assets/images/temp8.jpg"  class="tempdesign">
+                        <!-- </ion-avatar> -->
+                        <ion-radio slot="end" value="8"></ion-radio>
+                    </ion-item>
+                </ion-row>
+                <ion-row>
+                    <ion-item no-lines>
+                        <!-- <ion-avatar slot="start"> -->
+                            <img src="assets/images/temp9.jpg"  class="tempdesign">
+                        <!-- </ion-avatar> -->
+                        <ion-radio slot="end" value="9"></ion-radio>
+                    </ion-item>
+                </ion-row>
+                <ion-row>
+                    <ion-item no-lines>
+                        <!-- <ion-avatar slot="start"> -->
+                            <img src="assets/images/temp10.jpg"  class="tempdesign">
+                        <!-- </ion-avatar> -->
+                        <ion-radio slot="end" value="10"></ion-radio>
+                    </ion-item>
+                </ion-row>
+            </ion-radio-group>
+        </ion-list>
+
+        <!-- <ion-item>
+            <ion-label>Choose template</ion-label>
+            <ion-select interface="popover" formControlName="template" class="template">
+                <ion-select-option value="1" class="template">
+                    Template 1
+                    <ion-avatar slot="start">
+                        <img src="assets/images/temp1.jpg">
+                    </ion-avatar>
+                </ion-select-option>
+                <ion-select-option value="2">
+                    Template 2
+                    <ion-avatar slot="start">
+                        <img src="assets/images/temp2.jpg">
+                    </ion-avatar>
+                </ion-select-option>
+                <ion-select-option value="3">
+                    Template 3
+                    <ion-avatar slot="start">
+                        <img src="assets/images/temp3.jpg">
+                    </ion-avatar>
+                </ion-select-option>
+                <ion-select-option value="4">
+                    Template 4
+                    <ion-avatar slot="start">
+                        <img src="assets/images/temp4.jpg">
+                    </ion-avatar>
+                </ion-select-option>
+                <ion-select-option value="5">
+                    Template 5
+                    <ion-avatar slot="start">
+                        <img src="assets/images/temp5.jpg">
+                    </ion-avatar>
+                </ion-select-option>
+                <ion-select-option value="6">
+                    Template 6
+                    <ion-avatar slot="start">
+                        <img src="assets/images/temp6.jpg">
+                    </ion-avatar>
+                </ion-select-option>
+                <ion-select-option value="7">
+                    Template 7
+                    <ion-avatar slot="start">
+                        <img src="assets/images/temp7.jpg">
+                    </ion-avatar>
+                </ion-select-option>
+                <ion-select-option value="8">
+                    Template 8
+                    <ion-avatar slot="start">
+                        <img src="assets/images/temp8.jpg">
+                    </ion-avatar>
+                </ion-select-option>
+                <ion-select-option value="9">
+                    Template 9
+                    <ion-avatar slot="start">
+                        <img src="assets/images/temp9.jpg">
+                    </ion-avatar>
+                </ion-select-option>
+                <ion-select-option value="10">
+                    Template 10
+                </ion-select-option>
+            </ion-select>
+        </ion-item> -->
+
+        <ion-item *ngIf="validateField=='true'">
+            <div *ngIf="!businessForm.controls['template'].valid && businessForm.controls['template'].touched" class="text-danger">
+                <p>Please select template</p>
+            </div>
+        </ion-item>
+        <ion-title class="title">Opening hours</ion-title>
+        <ion-item>
+            <ion-label>Sunday</ion-label>
+            <ion-datetime displayFormat="HH:mm" placeholder="Start Time" formControlName="sun_start_time"></ion-datetime>
+
+            <ion-datetime displayFormat="HH:mm" placeholder="End Time" formControlName="sun_end_time"></ion-datetime>
+
+        </ion-item>
+        <!-- <div *ngIf="!businessForm.controls['sun_start_time'].valid && businessForm.controls['sun_start_time'].touched" class="text-danger"><p>Please select Start time</p>
+                    </div>
+                <div *ngIf="!businessForm.controls['sun_end_time'].valid && businessForm.controls['sun_end_time'].touched" class="text-danger"><p>Please select End time</p>
+                    </div> -->
+
+        <ion-item>
+            <ion-label>Monday</ion-label>
+            <ion-datetime displayFormat="HH:mm" placeholder="Start Time" formControlName="mon_start_time"></ion-datetime>
+
+            <ion-datetime displayFormat="HH:mm" placeholder="End Time" formControlName="mon_end_time"></ion-datetime>
+
+        </ion-item>
+        <!-- <div *ngIf="!businessForm.controls['mon_start_time'].valid && businessForm.controls['mon_start_time'].touched" class="text-danger"><p>Please select Start time</p>
+                    </div>
+                <div *ngIf="!businessForm.controls['mon_end_time'].valid && businessForm.controls['mon_end_time'].touched" class="text-danger"><p>Please select End time</p>
+                    </div> -->
+        <ion-item>
+            <ion-label>Tuesday</ion-label>
+            <ion-datetime displayFormat="HH:mm" placeholder="Start Time" formControlName="tues_start_time"></ion-datetime>
+
+            <ion-datetime displayFormat="HH:mm" placeholder="End Time" formControlName="tues_end_time"></ion-datetime>
+
+        </ion-item>
+        <!-- <div *ngIf="!businessForm.controls['tues_start_time'].valid && businessForm.controls['tues_start_time'].touched" class="text-danger"><p>Please select Start time</p>
+                    </div>
+                <div *ngIf="!businessForm.controls['tues_end_time'].valid && businessForm.controls['tues_end_time'].touched" class="text-danger"><p>Please select End time</p>
+                    </div> -->
+        <ion-item>
+            <ion-label>Wednesday</ion-label>
+            <ion-datetime displayFormat="HH:mm" placeholder="Start Time" formControlName="wed_start_time"></ion-datetime>
+
+            <ion-datetime displayFormat="HH:mm" placeholder="End Time" formControlName="wed_end_time"></ion-datetime>
+
+        </ion-item>
+        <!-- <div *ngIf="!businessForm.controls['wed_start_time'].valid && businessForm.controls['wed_start_time'].touched" class="text-danger"><p>Please select Start time</p>
+                    </div>
+
+                <div *ngIf="!businessForm.controls['wed_end_time'].valid && businessForm.controls['wed_end_time'].touched" class="text-danger"><p>Please select End time</p>
+                    </div> -->
+        <ion-item>
+            <ion-label>Thursday</ion-label>
+            <ion-datetime displayFormat="HH:mm" placeholder="Start Time" formControlName="thurs_start_time"></ion-datetime>
+
+            <ion-datetime displayFormat="HH:mm" placeholder="End Time" formControlName="thurs_end_time"></ion-datetime>
+
+        </ion-item>
+        <!-- <div *ngIf="!businessForm.controls['thurs_start_time'].valid && businessForm.controls['thurs_start_time'].touched" class="text-danger"><p>Please select Start time</p>
+                    </div>
+                <div *ngIf="!businessForm.controls['thurs_end_time'].valid && businessForm.controls['thurs_end_time'].touched" class="text-danger"><p>Please select End time</p>
+                    </div> -->
+        <ion-item>
+            <ion-label>Friday</ion-label>
+            <ion-datetime displayFormat="HH:mm" placeholder="Start Time" formControlName="fri_start_time"></ion-datetime>
+            <ion-datetime displayFormat="HH:mm" placeholder="End Time" formControlName="fri_end_time"></ion-datetime>
+
+        </ion-item>
+        <!-- <div *ngIf="!businessForm.controls['fri_start_time'].valid && businessForm.controls['fri_start_time'].touched" class="text-danger"><p>Please select Start time</p>
+                    </div>
+                <div *ngIf="!businessForm.controls['fri_end_time'].valid && businessForm.controls['fri_end_time'].touched" class="text-danger"><p>Please select End time</p>
+                    </div> -->
+        <ion-item>
+            <ion-label>Saturday</ion-label>
+            <ion-datetime displayFormat="HH:mm" placeholder="Start Time" formControlName="sat_start_time"></ion-datetime>
+
+            <ion-datetime displayFormat="HH:mm" placeholder="End Time" formControlName="sat_end_time"></ion-datetime>
+
+        </ion-item>
+        <!-- <div *ngIf="!businessForm.controls['sat_start_time'].valid && businessForm.controls['sat_start_time'].touched" class="text-danger"><p>Please select Start time</p>
+                    </div>
+                <div *ngIf="!businessForm.controls['sat_end_time'].valid && businessForm.controls['sat_end_time'].touched" class="text-danger"><p>Please select End time</p>
+                    </div> -->
+        <!-- <ion-button expand="block" (click)="toPresentLoadingWithOptions({duration: 5000, message: 'Please wait...', spinner: 'lines'})">Add</ion-button> -->
+        <ion-button slot="start" color="primary" class="button button-full button-balanced" type="submit">Add</ion-button>
+    </form>
+
+</ion-content>
