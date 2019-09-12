@@ -1,0 +1,56 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Login</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <div text-left class="brand pdb-30">
+        <div class="img">
+            <img class="parallax-obj parallax-down-obj" src="assets/images/icon.jpg">
+
+        </div>
+    </div>
+    <hr/>
+    <hr/>
+    <hr/>
+
+
+    <form [formGroup]="loginForm" (submit)="loginUser()">
+        <ion-item>
+                <ion-icon name="call" slot="start"></ion-icon>
+            <!-- <ion-input type="numb" maxlength="10" formControlName="contactno" placeholder="Mobile Number"></ion-input> -->
+            <ion-input type="tel" maxlength="10" formControlName="contactno" placeholder="Mobile Number"></ion-input>
+            <!-- <small *ngIf="!signupForm.controls['contactno'].valid && signupForm.controls['contactno'].touched" class="text-danger">Enter a Valid Contact Number </small> -->
+        </ion-item>
+        <!-- <ion-item>
+                <ion-input required type="text" formControlName="email" placeholder="E-mail"></ion-input>
+            </ion-item> -->
+        <ion-item>
+                <ion-icon name="finger-print" slot="start"></ion-icon>
+            <ion-input required type="password" formControlName="password" placeholder="Password"></ion-input>
+        </ion-item>
+        <hr/>
+        <hr/>
+    </form>
+    <div text-center>
+        <a class="forgot" (click)="signup()">Sign up now / </a>
+        <a class="forgot" (click)="forgot()">Forgot Password?</a>
+      </div>
+      <hr/>
+</ion-content>
+<!-- 
+<ion-footer>
+    <ion-toolbar>
+        <ion-button slot="start" color="primary" class="buttons back" (click)="loginUser()">Login</ion-button>
+        <ion-button slot="start"  color="light" class="buttons color" (click)="signup()">SignUp</ion-button>
+    </ion-toolbar>
+</ion-footer> -->
+<ion-footer>
+        <hr/>
+           
+        <ion-toolbar>
+            <ion-button slot="start" color="primary" class="buttons back" (click)="loginUser()">Login</ion-button>
+            <!-- <ion-button slot="start"  color="light" class="buttons color" (click)="signup()">SignUp</ion-button> -->
+        </ion-toolbar>
+    </ion-footer>

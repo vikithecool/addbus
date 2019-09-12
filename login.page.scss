@@ -1,0 +1,25 @@
+// .buttons
+// {
+//     width:50%;
+//     --ion-background-color: #a31f23;
+// }
+ion-button.buttons.color.button.button-solid.ion-activatable.hydrated {
+    color: black;
+    border: 1px solid #a31f23;
+    width:100%;
+}
+ion-button.buttons.back.button.button-solid.ion-activatable.hydrated {
+    
+    // --ion-background-color: #a31f23;
+    width:100%;
+}
+.forgot
+{
+color: #3b7386;
+}
+img {
+    max-height: unset !important;
+    display: flex !important;
+    max-width: 50% !important;
+    margin: 0px auto !important;
+}
